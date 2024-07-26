@@ -7,7 +7,7 @@ It is generated with [Stainless](https://www.stainlessapi.com/).
 
 ## Documentation
 
-Documentation for the most recent version of this gem can be found [on RubyDoc](https://rubydoc.info/github/stainless-sdks/meorphis-test-40-ruby).
+Documentation for the most recent version of this gem can be found [on RubyDoc](https://rubydoc.info/github/meorphis/test-repo-11).
 
 The underlying REST API documentation can be found on [docs.meorphis-test-40.com](https://docs.meorphis-test-40.com).
 
@@ -17,7 +17,7 @@ To use this gem during the beta, install directly from GitHub with Bundler by
 adding the following to your application's `Gemfile`:
 
 ```ruby
-gem "meorphis-test-40", git: "https://github.com/stainless-sdks/meorphis-test-40-ruby", branch: "main"
+gem "meorphis-test-40", git: "https://github.com/meorphis/test-repo-11", branch: "main"
 ```
 
 To fetch an initial copy of the gem:
