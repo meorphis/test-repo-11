@@ -12,10 +12,10 @@ module MeorphisTest40
       end
 
       # Get account configuration such as spend limits.
-      # 
+      #
       # @param account_token [String] Globally unique identifier for account.
       # @param opts [Hash|RequestOptions] Options to specify HTTP behaviour for this request.
-      # 
+      #
       # @return [MeorphisTest40::Models::AccountConfiguration]
       def retrieve(account_token, opts = {})
         req = {}
@@ -27,12 +27,12 @@ module MeorphisTest40
 
       # Update account configuration such as spend limits and verification address. Can
       #   only be run on accounts that are part of the program managed by this API key.
-      # 
+      #
       #   Accounts that are in the `PAUSED` state will not be able to transact or create
       #   new cards.
-      # 
+      #
       # @param account_token [String] Globally unique identifier for account.
-      # 
+      #
       # @param params [Hash] Attributes to send in this request.
       # @option params [Integer] :daily_spend_limit Amount (in cents) for the account's daily spend limit. By default the daily
       #   spend limit is set to $1,250.
@@ -48,9 +48,9 @@ module MeorphisTest40
       # @option params [Symbol] :state Account states.
       # @option params [VerificationAddress] :verification_address Address used during Address Verification Service (AVS) checks during
       #   transactions if enabled via Auth Rules.
-      # 
+      #
       # @param opts [Hash|RequestOptions] Options to specify HTTP behaviour for this request.
-      # 
+      #
       # @return [MeorphisTest40::Models::AccountConfiguration]
       def update(account_token, params = {}, opts = {})
         req = {}

@@ -8,9 +8,9 @@ module MeorphisTest40
       end
 
       # API status check
-      # 
+      #
       # @param opts [Hash|RequestOptions] Options to specify HTTP behaviour for this request.
-      # 
+      #
       # @return [MeorphisTest40::Models::StatusListResponse]
       def list(opts = {})
         req = {}
