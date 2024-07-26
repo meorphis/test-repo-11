@@ -12,7 +12,7 @@ import (
 
 	"github.com/tidwall/sjson"
 
-	"github.com/stainless-sdks/meorphis-test-40-go/internal/param"
+	"github.com/meorphis/test-repo-11/internal/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc

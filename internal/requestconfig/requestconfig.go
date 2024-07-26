@@ -17,10 +17,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stainless-sdks/meorphis-test-40-go/internal"
-	"github.com/stainless-sdks/meorphis-test-40-go/internal/apierror"
-	"github.com/stainless-sdks/meorphis-test-40-go/internal/apiform"
-	"github.com/stainless-sdks/meorphis-test-40-go/internal/apiquery"
+	"github.com/meorphis/test-repo-11/internal"
+	"github.com/meorphis/test-repo-11/internal/apierror"
+	"github.com/meorphis/test-repo-11/internal/apiform"
+	"github.com/meorphis/test-repo-11/internal/apiquery"
 )
 
 func getDefaultHeaders() map[string]string {

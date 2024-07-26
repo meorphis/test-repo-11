@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/stainless-sdks/meorphis-test-40-go/internal/apijson"
+	"github.com/meorphis/test-repo-11/internal/apijson"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is
