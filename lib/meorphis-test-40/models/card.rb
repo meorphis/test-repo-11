@@ -44,7 +44,7 @@ module MeorphisTest40
       # * `PAUSED` - Card will decline authorizations, but can be resumed at a later time.
       # * `PENDING_FULFILLMENT` - The initial state for cards of type `PHYSICAL`. The card is provisioned pending manufacturing and fulfillment. Cards in this state can accept authorizations for e-commerce purchases, but not for "Card Present" purchases where the physical card itself is present.
       # * `PENDING_ACTIVATION` - Each business day at 2pm Eastern Time Zone (ET), cards of type `PHYSICAL` in state `PENDING_FULFILLMENT` are sent to the card production warehouse and updated to state `PENDING_ACTIVATION` . Similar to `PENDING_FULFILLMENT`, cards in this state can be used for e-commerce transactions. API clients should update the card's state to `OPEN` only after the cardholder confirms receipt of the card.
-      #
+      # 
       # In sandbox, the same daily batch fulfillment occurs, but no cards are actually manufactured.
       #
       #   @return [Symbol]
@@ -121,7 +121,7 @@ module MeorphisTest40
 
         # @!attribute [rw] state
         #   State of funding source.
-        #
+        # 
         # Funding source states:
         # * `ENABLED` - The funding account is available to use for card creation and transactions.
         # * `PENDING` - The funding account is still being verified e.g. bank micro-deposits verification.
