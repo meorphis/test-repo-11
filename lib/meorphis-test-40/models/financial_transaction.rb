@@ -35,7 +35,12 @@ module MeorphisTest40
       # @!attribute [rw] events
       #   A list of all financial events that have modified this financial transaction.
       #   @return [Array<MeorphisTest40::Models::FinancialTransaction::Event>]
-      required :events, MeorphisTest40::ArrayOf.new(-> { MeorphisTest40::Models::FinancialTransaction::Event })
+      required :events,
+               MeorphisTest40::ArrayOf.new(
+                 lambda {
+                   MeorphisTest40::Models::FinancialTransaction::Event
+                 }
+               )
 
       # @!attribute [rw] pending_amount
       #   Pending amount of the transaction in the currency's smallest unit (e.g., cents), including any acquirer fees.
