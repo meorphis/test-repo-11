@@ -9,11 +9,11 @@ module MeorphisTest40
         end
 
         # Get the card financial transaction for the provided token.
-        #
+        # 
         # @param card_token [String]
         # @param financial_transaction_token [String] Globally unique identifier for financial transaction token.
         # @param opts [Hash|RequestOptions] Options to specify HTTP behaviour for this request.
-        #
+        # 
         # @return [MeorphisTest40::Models::FinancialTransaction]
         def retrieve(card_token, financial_transaction_token, opts = {})
           req = {}

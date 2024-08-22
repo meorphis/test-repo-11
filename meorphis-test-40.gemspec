@@ -5,8 +5,8 @@ require_relative "lib/meorphis-test-40/version"
 Gem::Specification.new do |s|
   s.name = "meorphis-test-40"
   s.version = MeorphisTest40::VERSION
-  s.summary = "Ruby library to access the Meorphis Test 40 API"
-  s.authors = ["Meorphis Test 40"]
+  s.summary = "Ruby library to access the Meorphis Test 42 API"
+  s.authors = ["Meorphis Test 42"]
   s.email = "support@acme.com"
   s.files = Dir["lib/**/*.rb"]
   s.extra_rdoc_files = ["README.md"]
