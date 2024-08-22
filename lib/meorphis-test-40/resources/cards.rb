@@ -13,11 +13,11 @@ module MeorphisTest40
 
       # Create a new virtual or physical card. Parameters `pin`, `shipping_address`, and
       #   `product_id` only apply to physical cards.
-      #
+      # 
       # @param params [Hash] Attributes to send in this request.
-      # @option params [Symbol] :type
+      # @option params [Symbol] :type 
       #   Body param: Card types:
-      #
+      # 
       #   - `VIRTUAL` - Card will authorize at any merchant and can be added to a digital
       #     wallet like Apple Pay or Google Pay (if the card program is digital
       #     wallet-enabled).
@@ -58,7 +58,7 @@ module MeorphisTest40
       # @option params [ShippingAddress] :shipping_address Body param:
       # @option params [Symbol] :shipping_method Body param: Shipping method for the card. Only applies to cards of type
       #   PHYSICAL. Use of options besides `STANDARD` require additional permissions.
-      #
+      # 
       #   - `STANDARD` - USPS regular mail or similar international option, with no
       #     tracking
       #   - `STANDARD_WITH_TRACKING` - USPS regular mail or similar international option,
@@ -73,9 +73,9 @@ module MeorphisTest40
       #   effectively no limit, and should only be used to reset or remove a prior limit.
       #   Only a limit of 1 or above will result in declined transactions due to checks
       #   against the card limit.
-      # @option params [Symbol] :spend_limit_duration
+      # @option params [Symbol] :spend_limit_duration 
       #   Body param: Spend limit duration values:
-      #
+      # 
       #   - `ANNUALLY` - Card will authorize transactions up to spend limit in a calendar
       #     year.
       #   - `FOREVER` - Card will authorize only up to spend limit for the entire lifetime
@@ -84,9 +84,9 @@ module MeorphisTest40
       #     trailing month. Month is calculated as this calendar date one month prior.
       #   - `TRANSACTION` - Card will authorize multiple transactions if each individual
       #     transaction is under the spend limit.
-      # @option params [Symbol] :state
+      # @option params [Symbol] :state 
       #   Body param: Card state values:
-      #
+      # 
       #   - `OPEN` - Card will approve authorizations (if they match card and account
       #     parameters).
       #   - `PAUSED` - Card will decline authorizations, but can be resumed at a later
@@ -94,9 +94,9 @@ module MeorphisTest40
       # @option params [String] :idempotency_key Header param: Idempotency key for the POST request. See
       #   [Idempotency Requests](https://docs.acme.com/docs/idempotent-requests) for
       #   details on behavior such as cache duration.
-      #
+      # 
       # @param opts [Hash|RequestOptions] Options to specify HTTP behaviour for this request.
-      #
+      # 
       # @return [MeorphisTest40::Models::Card]
       def create(params = {}, opts = {})
         req = {}
@@ -108,10 +108,10 @@ module MeorphisTest40
       end
 
       # Get card configuration such as spend limit and state.
-      #
+      # 
       # @param card_token [String]
       # @param opts [Hash|RequestOptions] Options to specify HTTP behaviour for this request.
-      #
+      # 
       # @return [MeorphisTest40::Models::Card]
       def retrieve(card_token, opts = {})
         req = {}
@@ -123,12 +123,12 @@ module MeorphisTest40
 
       # Update the specified properties of the card. Unsupplied properties will remain
       #   unchanged. `pin` parameter only applies to physical cards.
-      #
+      # 
       #   _Note: setting a card to a `CLOSED` state is a final action that cannot be
       #   undone._
-      #
+      # 
       # @param card_token [String]
-      #
+      # 
       # @param params [Hash] Attributes to send in this request.
       # @option params [String] :auth_rule_token Identifier for any Auth Rules that will be applied to transactions taking place
       #   with the card.
@@ -146,9 +146,9 @@ module MeorphisTest40
       #   limit, and should only be used to reset or remove a prior limit. Only a limit of
       #   1 or above will result in declined transactions due to checks against the card
       #   limit.
-      # @option params [Symbol] :spend_limit_duration
+      # @option params [Symbol] :spend_limit_duration 
       #   Spend limit duration values:
-      #
+      # 
       #   - `ANNUALLY` - Card will authorize transactions up to spend limit in a calendar
       #     year.
       #   - `FOREVER` - Card will authorize only up to spend limit for the entire lifetime
@@ -157,18 +157,18 @@ module MeorphisTest40
       #     trailing month. Month is calculated as this calendar date one month prior.
       #   - `TRANSACTION` - Card will authorize multiple transactions if each individual
       #     transaction is under the spend limit.
-      # @option params [Symbol] :state
+      # @option params [Symbol] :state 
       #   Card state values:
-      #
+      # 
       #   - `CLOSED` - Card will no longer approve authorizations. Closing a card cannot
       #     be undone.
       #   - `OPEN` - Card will approve authorizations (if they match card and account
       #     parameters).
       #   - `PAUSED` - Card will decline authorizations, but can be resumed at a later
       #     time.
-      #
+      # 
       # @param opts [Hash|RequestOptions] Options to specify HTTP behaviour for this request.
-      #
+      # 
       # @return [MeorphisTest40::Models::Card]
       def update(card_token, params = {}, opts = {})
         req = {}
@@ -181,13 +181,13 @@ module MeorphisTest40
 
       # Allow your cardholders to directly add payment cards to the device's digital
       #   wallet (e.g. Apple Pay) with one touch from your app.
-      #
+      # 
       #   This requires some additional setup and configuration. Please
       #   [Contact Us](https://acme.com/contact) or your Customer Success representative
       #   for more information.
-      #
+      # 
       # @param card_token [String] Path param: The unique token of the card to add to the device's digital wallet.
-      #
+      # 
       # @param params [Hash] Attributes to send in this request.
       # @option params [String] :certificate Body param: Only applicable if `digital_wallet` is `APPLE_PAY`. Omit to receive
       #   only `activationData` in the response. Apple's public leaf certificate. Base64
@@ -203,9 +203,9 @@ module MeorphisTest40
       # @option params [String] :idempotency_key Header param: Idempotency key for the POST request. See
       #   [Idempotency Requests](https://docs.acme.com/docs/idempotent-requests) for
       #   details on behavior such as cache duration.
-      #
+      # 
       # @param opts [Hash|RequestOptions] Options to specify HTTP behaviour for this request.
-      #
+      # 
       # @return [MeorphisTest40::Models::CardProvisionResponse]
       def provision(card_token, params = {}, opts = {})
         req = {}
