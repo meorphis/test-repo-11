@@ -49,58 +49,58 @@ class MeorphisTest40Test < Test::Unit::TestCase
   end
 
   def test_client_default_request_default_retry_attempts
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(500, {}, {"x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"})
     end
     assert_equal(3, requester.attempts.length)
   end
 
   def test_client_given_request_default_retry_attempts
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 3)
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 3)
     requester = MockRequester.new(500, {}, {"x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"})
     end
     assert_equal(4, requester.attempts.length)
   end
 
   def test_client_default_request_given_retry_attempts
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(500, {}, {"x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"}, max_retries: 3)
+      meorphis_test_44.cards.create({type: "VIRTUAL"}, max_retries: 3)
     end
     assert_equal(4, requester.attempts.length)
   end
 
   def test_client_given_request_given_retry_attempts
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 3)
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 3)
     requester = MockRequester.new(500, {}, {"x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"}, max_retries: 4)
+      meorphis_test_44.cards.create({type: "VIRTUAL"}, max_retries: 4)
     end
     assert_equal(5, requester.attempts.length)
   end
 
   def test_client_retry_after_seconds
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 1)
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 1)
     requester = MockRequester.new(500, {}, {"retry-after" => "1.3", "x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"})
     end
     assert_equal(2, requester.attempts.length)
     assert_equal(requester.attempts.last[:headers]["X-Stainless-Mock-Slept"], 1.3)
   end
 
   def test_client_retry_after_date
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 1)
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 1)
     requester = MockRequester.new(
       500,
       {},
@@ -110,32 +110,32 @@ class MeorphisTest40Test < Test::Unit::TestCase
         "x-stainless-mock-sleep-base" => Time.now.httpdate
       }
     )
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"})
     end
     assert_equal(2, requester.attempts.length)
     assert_equal(requester.attempts.last[:headers]["X-Stainless-Mock-Slept"], 2)
   end
 
   def test_client_retry_after_ms
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 1)
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010", max_retries: 1)
     requester = MockRequester.new(500, {}, {"retry-after-ms" => "1300", "x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"})
     end
     assert_equal(2, requester.attempts.length)
     assert_equal(requester.attempts.last[:headers]["X-Stainless-Mock-Slept"], 1.3)
   end
 
   def test_retry_count_header
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(500, {}, {"x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
 
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"})
     end
 
     retry_count_headers = requester.attempts.map { |a| a[:headers]["X-Stainless-Retry-Count"] }
@@ -143,12 +143,12 @@ class MeorphisTest40Test < Test::Unit::TestCase
   end
 
   def test_omit_retry_count_header
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(500, {}, {"x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
 
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"}, extra_headers: {"X-Stainless-Retry-Count" => nil})
+      meorphis_test_44.cards.create({type: "VIRTUAL"}, extra_headers: {"X-Stainless-Retry-Count" => nil})
     end
 
     retry_count_headers = requester.attempts.map { |a| a[:headers]["X-Stainless-Retry-Count"] }
@@ -156,12 +156,12 @@ class MeorphisTest40Test < Test::Unit::TestCase
   end
 
   def test_overwrite_retry_count_header
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(500, {}, {"x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
 
     assert_raise(MeorphisTest40::HTTP::InternalServerError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"}, extra_headers: {"X-Stainless-Retry-Count" => "42"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"}, extra_headers: {"X-Stainless-Retry-Count" => "42"})
     end
 
     retry_count_headers = requester.attempts.map { |a| a[:headers]["X-Stainless-Retry-Count"] }
@@ -169,11 +169,11 @@ class MeorphisTest40Test < Test::Unit::TestCase
   end
 
   def test_client_redirect_307
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(307, {}, {"location" => "/redirected"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::APIConnectionError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"}, extra_headers: {})
+      meorphis_test_44.cards.create({type: "VIRTUAL"}, extra_headers: {})
     end
     assert_equal(requester.attempts[1][:path], "/redirected")
     assert_equal(requester.attempts[1][:method], requester.attempts[0][:method])
@@ -185,11 +185,11 @@ class MeorphisTest40Test < Test::Unit::TestCase
   end
 
   def test_client_redirect_303
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(303, {}, {"location" => "/redirected"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::APIConnectionError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"}, extra_headers: {})
+      meorphis_test_44.cards.create({type: "VIRTUAL"}, extra_headers: {})
     end
     assert_equal(requester.attempts[1][:path], "/redirected")
     assert_equal(requester.attempts[1][:method], :get)
@@ -198,11 +198,11 @@ class MeorphisTest40Test < Test::Unit::TestCase
   end
 
   def test_client_redirect_auth_keep_same_origin
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(307, {}, {"location" => "/redirected"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::APIConnectionError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"}, extra_headers: {"Authorization" => "Bearer xyz"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"}, extra_headers: {"Authorization" => "Bearer xyz"})
     end
     assert_equal(
       requester.attempts[1][:headers]["Authorization"],
@@ -211,20 +211,20 @@ class MeorphisTest40Test < Test::Unit::TestCase
   end
 
   def test_client_redirect_auth_strip_cross_origin
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(307, {}, {"location" => "https://example.com/redirected"})
-    meorphis_test_43.requester = requester
+    meorphis_test_44.requester = requester
     assert_raise(MeorphisTest40::HTTP::APIConnectionError) do
-      meorphis_test_43.cards.create({type: "VIRTUAL"}, extra_headers: {"Authorization" => "Bearer xyz"})
+      meorphis_test_44.cards.create({type: "VIRTUAL"}, extra_headers: {"Authorization" => "Bearer xyz"})
     end
     assert_equal(requester.attempts[1][:headers]["Authorization"], nil)
   end
 
   def test_default_headers
-    meorphis_test_43 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
+    meorphis_test_44 = MeorphisTest40::Client.new(base_url: "http://localhost:4010")
     requester = MockRequester.new(200, {}, {"x-stainless-mock-sleep" => "true"})
-    meorphis_test_43.requester = requester
-    meorphis_test_43.cards.create({type: "VIRTUAL"})
+    meorphis_test_44.requester = requester
+    meorphis_test_44.cards.create({type: "VIRTUAL"})
     headers = requester.attempts[0][:headers]
     assert_not_empty(headers["X-Stainless-Lang"])
     assert_not_empty(headers["X-Stainless-Package-Version"])
