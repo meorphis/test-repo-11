@@ -8,7 +8,7 @@ class MeorphisTest40::Test::Resources::StatusTest < Test::Unit::TestCase
   end
 
   def test_list
-    response = @meorphis_test_42.status.list 
+    response = @meorphis_test_42.status.list
     assert_kind_of(MeorphisTest40::Models::StatusListResponse, response)
   end
 end
