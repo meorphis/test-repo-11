@@ -21,8 +21,9 @@ module MeorphisTest40
       #   * `PAUSED` - Account will not be able to transact or create new cards. It can be set back to `ACTIVE`.
       #   * `CLOSED` - Account will permanently not be able to transact or create new cards.
       #
+      #   One of the constants defined in {MeorphisTest40::Models::AccountConfiguration::State}
       #   @return [Symbol]
-      required :state, MeorphisTest40::Enum.new(:ACTIVE, :PAUSED, :CLOSED)
+      required :state, enum: -> { MeorphisTest40::Models::AccountConfiguration::State }
 
       # @!attribute [rw] account_holder
       #   @return [MeorphisTest40::Models::AccountConfiguration::AccountHolder]
@@ -53,6 +54,17 @@ module MeorphisTest40
         #   Monthly spend limit (in cents).
         #   @return [Integer]
         required :monthly, Integer
+      end
+
+      # Account state:
+      #   * `ACTIVE` - Account is able to transact and create new cards.
+      #   * `PAUSED` - Account will not be able to transact or create new cards. It can be set back to `ACTIVE`.
+      #   * `CLOSED` - Account will permanently not be able to transact or create new cards.
+      #
+      class State < MeorphisTest40::Enum
+        ACTIVE = :ACTIVE
+        PAUSED = :PAUSED
+        CLOSED = :CLOSED
       end
 
       class AccountHolder < BaseModel

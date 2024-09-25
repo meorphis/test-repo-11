@@ -14,13 +14,14 @@ module MeorphisTest40
       # * `ACH` - Transaction over ACH.
       # * `TRANSFER` - Internal transfer of funds between financial accounts in your program.
       #
+      #   One of the constants defined in {MeorphisTest40::Models::FinancialTransaction::Category}
       #   @return [Symbol]
-      required :category, MeorphisTest40::Enum.new(:CARD, :ACH, :TRANSFER)
+      required :category, enum: -> { MeorphisTest40::Models::FinancialTransaction::Category }
 
       # @!attribute [rw] created
       #   Date and time when the financial transaction first occurred. UTC time zone.
-      #   @return [String]
-      required :created, String
+      #   @return [DateTime]
+      required :created, DateTime
 
       # @!attribute [rw] currency
       #   3-digit alphabetic ISO 4217 code for the settling currency of the transaction.
@@ -46,8 +47,9 @@ module MeorphisTest40
 
       # @!attribute [rw] result
       #   APPROVED transactions were successful while DECLINED transactions were declined by user, Acme, or the network.
+      #   One of the constants defined in {MeorphisTest40::Models::FinancialTransaction::Result}
       #   @return [Symbol]
-      required :result, MeorphisTest40::Enum.new(:APPROVED, :DECLINED)
+      required :result, enum: -> { MeorphisTest40::Models::FinancialTransaction::Result }
 
       # @!attribute [rw] settled_amount
       #   Amount of the transaction that has been settled in the currency's smallest unit (e.g., cents), including any acquirer fees. This may change over time.
@@ -62,13 +64,25 @@ module MeorphisTest40
       # * `SETTLED` - The financial transaction is completed.
       # * `VOIDED` - The merchant has voided the previously pending card authorization.
       #
+      #   One of the constants defined in {MeorphisTest40::Models::FinancialTransaction::Status}
       #   @return [Symbol]
-      required :status, MeorphisTest40::Enum.new(:DECLINED, :EXPIRED, :PENDING, :SETTLED, :VOIDED)
+      required :status, enum: -> { MeorphisTest40::Models::FinancialTransaction::Status }
 
       # @!attribute [rw] updated
       #   Date and time when the financial transaction was last updated. UTC time zone.
-      #   @return [String]
-      required :updated, String
+      #   @return [DateTime]
+      required :updated, DateTime
+
+      # Status types:
+      # * `CARD` - Issuing card transaction.
+      # * `ACH` - Transaction over ACH.
+      # * `TRANSFER` - Internal transfer of funds between financial accounts in your program.
+      #
+      class Category < MeorphisTest40::Enum
+        CARD = :CARD
+        ACH = :ACH
+        TRANSFER = :TRANSFER
+      end
 
       class Event < BaseModel
         # @!attribute [rw] token
@@ -83,13 +97,14 @@ module MeorphisTest40
 
         # @!attribute [rw] created
         #   Date and time when the financial event occurred. UTC time zone.
-        #   @return [String]
-        optional :created, String
+        #   @return [DateTime]
+        optional :created, DateTime
 
         # @!attribute [rw] result
         #   APPROVED financial events were successful while DECLINED financial events were declined by user, Acme, or the network.
+        #   One of the constants defined in {MeorphisTest40::Models::FinancialTransaction::Event::Result}
         #   @return [Symbol]
-        optional :result, MeorphisTest40::Enum.new(:APPROVED, :DECLINED)
+        optional :result, enum: -> { MeorphisTest40::Models::FinancialTransaction::Event::Result }
 
         # @!attribute [rw] type
         #   Event types:
@@ -116,32 +131,85 @@ module MeorphisTest40
         # * `TRANSFER` - Successful internal transfer of funds between financial accounts.
         # * `TRANSFER_INSUFFICIENT_FUNDS` - Declined internl transfer of funds due to insufficient balance of the sender.
         #
+        #   One of the constants defined in {MeorphisTest40::Models::FinancialTransaction::Event::Type}
         #   @return [Symbol]
-        optional :type,
-                 MeorphisTest40::Enum.new(
-                   :ACH_INSUFFICIENT_FUNDS,
-                   :ACH_ORIGINATION_PENDING,
-                   :ACH_ORIGINATION_RELEASED,
-                   :ACH_RECEIPT_PENDING,
-                   :ACH_RECEIPT_RELEASED,
-                   :ACH_RETURN,
-                   :AUTHORIZATION,
-                   :AUTHORIZATION_ADVICE,
-                   :AUTHORIZATION_EXPIRY,
-                   :AUTHORIZATION_REVERSAL,
-                   :BALANCE_INQUIRY,
-                   :CLEARING,
-                   :CORRECTION_DEBIT,
-                   :CORRECTION_CREDIT,
-                   :CREDIT_AUTHORIZATION,
-                   :CREDIT_AUTHORIZATION_ADVICE,
-                   :FINANCIAL_AUTHORIZATION,
-                   :FINANCIAL_CREDIT_AUTHORIZATION,
-                   :RETURN,
-                   :RETURN_REVERSAL,
-                   :TRANSFER,
-                   :TRANSFER_INSUFFICIENT_FUNDS
-                 )
+        optional :type, enum: -> { MeorphisTest40::Models::FinancialTransaction::Event::Type }
+
+        # APPROVED financial events were successful while DECLINED financial events were declined by user, Acme, or the network.
+        class Result < MeorphisTest40::Enum
+          APPROVED = :APPROVED
+          DECLINED = :DECLINED
+        end
+
+        # Event types:
+        # * `ACH_INSUFFICIENT_FUNDS` - Attempted ACH origination declined due to insufficient balance.
+        # * `ACH_ORIGINATION_PENDING` - ACH origination pending release from an ACH hold.
+        # * `ACH_ORIGINATION_RELEASED` - ACH origination released from pending to available balance.
+        # * `ACH_RECEIPT_PENDING` - ACH receipt pending release from an ACH holder.
+        # * `ACH_RECEIPT_RELEASED` - ACH receipt released from pending to available balance.
+        # * `ACH_RETURN` - ACH origination returned by the Receiving Depository Financial Institution.
+        # * `AUTHORIZATION` - Authorize a card transaction.
+        # * `AUTHORIZATION_ADVICE` - Advice on a card transaction.
+        # * `AUTHORIZATION_EXPIRY` - Card Authorization has expired and reversed by Acme.
+        # * `AUTHORIZATION_REVERSAL` - Card Authorization was reversed by the merchant.
+        # * `BALANCE_INQUIRY` - A card balance inquiry (typically a $0 authorization) has occurred on a card.
+        # * `CLEARING` - Card Transaction is settled.
+        # * `CORRECTION_DEBIT` - Manual card transaction correction (Debit).
+        # * `CORRECTION_CREDIT` - Manual card transaction correction (Credit).
+        # * `CREDIT_AUTHORIZATION` - A refund or credit card authorization from a merchant.
+        # * `CREDIT_AUTHORIZATION_ADVICE` - A credit card authorization was approved on your behalf by the network.
+        # * `FINANCIAL_AUTHORIZATION` -  A request from a merchant to debit card funds without additional clearing.
+        # * `FINANCIAL_CREDIT_AUTHORIZATION` - A request from a merchant to refund or credit card funds without additional clearing.
+        # * `RETURN` - A card refund has been processed on the transaction.
+        # * `RETURN_REVERSAL` - A card refund has been reversed (e.g., when a merchant reverses an incorrect refund).
+        # * `TRANSFER` - Successful internal transfer of funds between financial accounts.
+        # * `TRANSFER_INSUFFICIENT_FUNDS` - Declined internl transfer of funds due to insufficient balance of the sender.
+        #
+        class Type < MeorphisTest40::Enum
+          ACH_INSUFFICIENT_FUNDS = :ACH_INSUFFICIENT_FUNDS
+          ACH_ORIGINATION_PENDING = :ACH_ORIGINATION_PENDING
+          ACH_ORIGINATION_RELEASED = :ACH_ORIGINATION_RELEASED
+          ACH_RECEIPT_PENDING = :ACH_RECEIPT_PENDING
+          ACH_RECEIPT_RELEASED = :ACH_RECEIPT_RELEASED
+          ACH_RETURN = :ACH_RETURN
+          AUTHORIZATION = :AUTHORIZATION
+          AUTHORIZATION_ADVICE = :AUTHORIZATION_ADVICE
+          AUTHORIZATION_EXPIRY = :AUTHORIZATION_EXPIRY
+          AUTHORIZATION_REVERSAL = :AUTHORIZATION_REVERSAL
+          BALANCE_INQUIRY = :BALANCE_INQUIRY
+          CLEARING = :CLEARING
+          CORRECTION_DEBIT = :CORRECTION_DEBIT
+          CORRECTION_CREDIT = :CORRECTION_CREDIT
+          CREDIT_AUTHORIZATION = :CREDIT_AUTHORIZATION
+          CREDIT_AUTHORIZATION_ADVICE = :CREDIT_AUTHORIZATION_ADVICE
+          FINANCIAL_AUTHORIZATION = :FINANCIAL_AUTHORIZATION
+          FINANCIAL_CREDIT_AUTHORIZATION = :FINANCIAL_CREDIT_AUTHORIZATION
+          RETURN = :RETURN
+          RETURN_REVERSAL = :RETURN_REVERSAL
+          TRANSFER = :TRANSFER
+          TRANSFER_INSUFFICIENT_FUNDS = :TRANSFER_INSUFFICIENT_FUNDS
+        end
+      end
+
+      # APPROVED transactions were successful while DECLINED transactions were declined by user, Acme, or the network.
+      class Result < MeorphisTest40::Enum
+        APPROVED = :APPROVED
+        DECLINED = :DECLINED
+      end
+
+      # Status types:
+      # * `DECLINED` - The card transaction was declined.
+      # * `EXPIRED` - Acme reversed the card authorization as it has passed its expiration time.
+      # * `PENDING` - Authorization is pending completion from the merchant or pending release from ACH hold period
+      # * `SETTLED` - The financial transaction is completed.
+      # * `VOIDED` - The merchant has voided the previously pending card authorization.
+      #
+      class Status < MeorphisTest40::Enum
+        DECLINED = :DECLINED
+        EXPIRED = :EXPIRED
+        PENDING = :PENDING
+        SETTLED = :SETTLED
+        VOIDED = :VOIDED
       end
     end
   end
