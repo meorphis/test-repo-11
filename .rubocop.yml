@@ -2,7 +2,11 @@
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
 
-# Prefer double quotes so that interpolaiton can be easily added.
+# And/or have confusing precedence, avoid them.
+Style/AndOr:
+  EnforcedStyle: always
+
+# Prefer double quotes so that interpolation can be easily added.
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
@@ -19,7 +23,7 @@ Style/SymbolArray:
 Style/IfUnlessModifier:
   Enabled: false
 
-# Unless is not neccisarily clearer.
+# Unless is not necessarily clearer.
 Style/NegatedIf:
   Enabled: false
 
@@ -93,7 +97,7 @@ Layout/FirstMethodParameterLineBreak:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
-# These cops are not as applicaple to generated code.
+# These cops are not as applicable to generated code.
 Metrics/ParameterLists:
   Enabled: false
 Metrics/MethodLength:
