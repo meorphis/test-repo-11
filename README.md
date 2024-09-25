@@ -1,6 +1,6 @@
-# Meorphis Test 42 Ruby API library
+# Meorphis Test 43 Ruby API library
 
-The Meorphis Test 42 Ruby library provides convenient access to the Meorphis Test 42 REST API from any Ruby 3.0+
+The Meorphis Test 43 Ruby library provides convenient access to the Meorphis Test 43 REST API from any Ruby 3.0+
 application.
 
 It is generated with [Stainless](https://www.stainlessapi.com/).
@@ -38,11 +38,11 @@ bundle update meorphis-test-40
 ```ruby
 require "meorphis-test-40"
 
-meorphis_test_42 = MeorphisTest40::Client.new(
+meorphis_test_43 = MeorphisTest40::Client.new(
   environment: "environment_1" # defaults to "production"
 )
 
-card = meorphis_test_42.cards.create(type: "REPLACE_ME")
+card = meorphis_test_43.cards.create(type: "REPLACE_ME")
 
 puts card.token
 ```
@@ -55,7 +55,7 @@ non-success status code (i.e., 4xx or 5xx response), a subclass of
 
 ```ruby
 begin
-  card = meorphis_test_42.cards.create(type: "REPLACE_ME")
+  card = meorphis_test_43.cards.create(type: "REPLACE_ME")
 rescue MeorphisTest40::HTTP::Error => e
   puts e.code # 400
 end
@@ -87,12 +87,12 @@ You can use the `max_retries` option to configure or disable this:
 
 ```ruby
 # Configure the default for all requests:
-meorphis_test_42 = MeorphisTest40::Client.new(
+meorphis_test_43 = MeorphisTest40::Client.new(
   max_retries: 0 # default is 2
 )
 
 # Or, configure per-request:
-meorphis_test_42.cards.create(type: "REPLACE_ME", max_retries: 5)
+meorphis_test_43.cards.create(type: "REPLACE_ME", max_retries: 5)
 ```
 
 ## Versioning
