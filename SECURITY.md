@@ -16,9 +16,9 @@ before making any information public.
 ## Reporting Non-SDK Related Security Issues
 
 If you encounter security issues that are not directly related to SDKs but pertain to the services
-or products provided by Meorphis Test 42 please follow the respective company's security reporting guidelines.
+or products provided by Meorphis Test 46 please follow the respective company's security reporting guidelines.
 
-### Meorphis Test 42 Terms and Policies
+### Meorphis Test 46 Terms and Policies
 
 Please contact support@acme.com for any questions or concerns regarding security of our services.
 
