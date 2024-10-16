@@ -33,7 +33,25 @@ module MeorphisTest40
         #   The external bank account token to use for auto-collections
         #   @return [String]
         optional :external_bank_account_token, String
+
+        # @!parse
+        #   # Create a new instance of CollectionsConfiguration from a Hash of raw data.
+        #   #
+        #   # @param data [Hash{Symbol => Object}] .
+        #   #   @option data [Integer] :billing_period Number of days within the billing period
+        #   #   @option data [Integer] :payment_period Number of days after the billing period ends that a payment is required
+        #   #   @option data [String, nil] :external_bank_account_token The external bank account token to use for auto-collections
+        #   def initialize(data = {}) = super
       end
+
+      # @!parse
+      #   # Create a new instance of BusinessAccount from a Hash of raw data.
+      #   #
+      #   # @param data [Hash{Symbol => Object}] .
+      #   #   @option data [String] :token Account token
+      #   #   @option data [Object, nil] :collections_configuration
+      #   #   @option data [Integer, nil] :credit_limit Credit limit extended to the Account
+      #   def initialize(data = {}) = super
     end
   end
 end

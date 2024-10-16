@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "date"
+require "time"
 
 module MeorphisTest40
   # @!visibility private
@@ -22,8 +23,8 @@ module MeorphisTest40
         type.convert(value)
       elsif type == Date
         Date.parse(value)
-      elsif type == DateTime
-        DateTime.parse(value)
+      elsif type == Time
+        Time.parse(value)
       elsif type == NilClass
         nil
       elsif type == Float
@@ -117,7 +118,8 @@ module MeorphisTest40
       rescue StandardError
         name = self.class.name.split("::").last
         raise ConversionError,
-              "Failed to parse #{name}.#{name_sym} as #{field_type.inspect}. To get the unparsed API response, use #{name}[:#{name_sym}]."
+              "Failed to parse #{name}.#{name_sym} as #{field_type.inspect}. " \
+              "To get the unparsed API response, use #{name}[:#{name_sym}]."
       end
       define_method("#{name_sym}=") { |val| @data[name_sym] = val }
     end
@@ -140,7 +142,7 @@ module MeorphisTest40
     end
 
     # Create a new instance of a model.
-    # @param data [Hash] Model attributes.
+    # @param data [Hash{Symbol => Object}] Raw data to initialize the model with.
     def initialize(data = {})
       @data = {}
       # TODO: what if data isn't a hash?
@@ -156,7 +158,7 @@ module MeorphisTest40
     end
 
     # Returns a Hash of the data underlying this object.
-    # Keys are Symbols and values are the parsed / typed domain objects.
+    # Keys are Symbols and values are the raw values from the response.
     # The return value indicates which values were ever set on the object -
     # i.e. there will be a key in this hash if they ever were, even if the
     # set value was nil.
@@ -170,21 +172,34 @@ module MeorphisTest40
 
     alias_method :to_hash, :to_h
 
-    # Lookup attribute value by key in the object.
-    # If this key was not provided when the object was formed (e.g. because the API response
-    # did not include that key), returns nil.
+    # Returns the raw value associated with the given key, if found. Otherwise, nil is returned.
     # It is valid to lookup keys that are not in the API spec, for example to access
     # undocumented features.
+    # This method does not parse response data into higher-level types.
     # Lookup by anything other than a Symbol is an ArgumentError.
     #
     # @param key [Symbol] Key to look up by.
     #
-    # @return [Object] Parsed / typed value at the given key, or nil if no data is available.
+    # @return [Object, nil] The raw value at the given key.
     def [](key)
       if !key.instance_of?(Symbol)
         raise ArgumentError, "Expected symbol key for lookup, got #{key.inspect}"
       end
       @data[key]
+    end
+
+    def deconstruct_keys(keys)
+      (keys || self.class.fields.keys).to_h do |k|
+        if !k.instance_of?(Symbol)
+          raise ArgumentError, "Expected symbol key for lookup, got #{k.inspect}"
+        end
+
+        if !self.class.fields.key?(k)
+          raise KeyError, "Expected one of #{self.class.fields.keys}, got #{k.inspect}"
+        end
+
+        [k, method(k).call]
+      end
     end
 
     # @return [String]
