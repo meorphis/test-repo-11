@@ -1,4 +1,4 @@
-# Meorphis Test 42 Ruby API library
+# Meorphis Test 43 Ruby API library
 
 The Meorphis Test 42 Ruby library provides convenient access to the Meorphis Test 42 REST API from any Ruby 3.0+
 application.
