@@ -7,12 +7,7 @@
 # - Define shared testing namespace so that we don't need to indent test files as much
 
 require "meorphis-test-40"
+require_relative "test_namespaces"
 
-require "test/unit"
-
-module MeorphisTest40
-  module Test
-    module Resources
-    end
-  end
-end
+require "minitest"
+require "stringio"

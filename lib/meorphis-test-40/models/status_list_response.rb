@@ -6,6 +6,13 @@ module MeorphisTest40
       # @!attribute [rw] message
       #   @return [String]
       optional :message, String
+
+      # @!parse
+      #   # Create a new instance of StatusListResponse from a Hash of raw data.
+      #   #
+      #   # @param data [Hash{Symbol => Object}] .
+      #   #   @option data [String, nil] :message
+      #   def initialize(data = {}) = super
     end
   end
 end
