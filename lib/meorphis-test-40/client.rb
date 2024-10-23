@@ -5,9 +5,6 @@ module MeorphisTest40
     # Default max number of retries to attempt after a failed retryable request.
     DEFAULT_MAX_RETRIES = 2
 
-    # Client options.
-    attr_reader
-
     # @return [MeorphisTest40::Resources::Accounts]
     attr_reader :accounts
 
@@ -18,7 +15,18 @@ module MeorphisTest40
     attr_reader :status
 
     # Creates and returns a new client for interacting with the API.
-    def initialize(environment: nil, base_url: nil, max_retries: nil)
+    #
+    # @param environment ["production", "environment_1", nil] Specifies the environment to use for the API.
+    #
+    #   Each environment maps to a different base URL:
+    #
+    #   - `production` corresponds to `https://api.acme.com/v1`
+    #   - `environment_1` corresponds to `https://sandbox.acme.com/v1`
+    # @param base_url [String, nil] Override the default base URL for the API, e.g., `"https://api.example.com/v2/"`
+    # @param max_retries [Integer] Max number of retries to attempt after a failed retryable request.
+    #
+    # @return [MeorphisTest40::Client]
+    def initialize(environment: nil, base_url: nil, max_retries: DEFAULT_MAX_RETRIES, timeout: 60)
       environments = {"production" => "https://api.acme.com/v1", "environment_1" => "https://sandbox.acme.com/v1"}
       if environment && base_url
         raise ArgumentError, "both environment and base_url given, expected only one"
@@ -31,9 +39,7 @@ module MeorphisTest40
         base_url = "https://api.acme.com/v1"
       end
 
-      max_retries ||= DEFAULT_MAX_RETRIES
-
-      super(base_url: base_url, max_retries: max_retries)
+      super(base_url: base_url, max_retries: max_retries, timeout: timeout)
 
       @accounts = MeorphisTest40::Resources::Accounts.new(client: self)
       @cards = MeorphisTest40::Resources::Cards.new(client: self)

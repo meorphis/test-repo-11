@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "date"
+require "time"
+
 module MeorphisTest40
   # @!visibility private
   module Converter
@@ -18,7 +21,10 @@ module MeorphisTest40
       # directly.
       if type.is_a?(Converter) || type.include?(Converter)
         type.convert(value)
-
+      elsif type == Date
+        Date.parse(value)
+      elsif type == Time
+        Time.parse(value)
       elsif type == NilClass
         nil
       elsif type == Float
@@ -63,18 +69,17 @@ module MeorphisTest40
   class Enum
     include Converter
 
-    # NB we don't do runtime validation, so `options` is just an FYI
-    # for the reader.
-    def initialize(*options)
-      @options = options
-    end
-
-    def convert(value)
+    def self.convert(value)
       if value.is_a?(String)
         value.to_sym
       else
         value
       end
+    end
+
+    # @return [Array<Symbol>] All of the valid Symbol values for this enum.
+    def self.values
+      @values ||= constants.map { |c| const_get(c) }
     end
   end
 
@@ -83,8 +88,8 @@ module MeorphisTest40
   class ArrayOf
     include Converter
 
-    def initialize(items_type_info)
-      @items_type_fn = items_type_info.is_a?(Proc) ? items_type_info : -> { items_type_info }
+    def initialize(items_type_info = nil, enum: nil)
+      @items_type_fn = enum || (items_type_info.is_a?(Proc) ? items_type_info : -> { items_type_info })
     end
 
     def convert(value)
@@ -107,36 +112,39 @@ module MeorphisTest40
       type_fn = type_info.is_a?(Proc) ? type_info : -> { type_info }
       fields[name_sym] = {type_fn: type_fn, mode: mode}
 
-      define_method(name_sym) { @data[name_sym] }
+      define_method(name_sym) do
+        field_type = type_fn.call
+        Converter.convert(field_type, @data[name_sym])
+      rescue StandardError
+        name = self.class.name.split("::").last
+        raise ConversionError,
+              "Failed to parse #{name}.#{name_sym} as #{field_type.inspect}. " \
+              "To get the unparsed API response, use #{name}[:#{name_sym}]."
+      end
       define_method("#{name_sym}=") { |val| @data[name_sym] = val }
     end
 
     # @!visibility private
     # NB `required` is just a signal to the reader. We don't do runtime validation anyway.
-    def self.required(name_sym, type_info, mode = :rw)
-      add_field(name_sym, type_info, mode)
+    def self.required(name_sym, type_info = nil, mode = :rw, enum: nil)
+      add_field(name_sym, enum || type_info, mode)
     end
 
     # @!visibility private
     # NB `optional` is just a signal to the reader. We don't do runtime validation anyway.
-    def self.optional(name_sym, type_info, mode = :rw)
-      add_field(name_sym, type_info, mode)
+    def self.optional(name_sym, type_info = nil, mode = :rw, enum: nil)
+      add_field(name_sym, enum || type_info, mode)
     end
 
     # @!visibility private
     def self.convert(data)
-      model = new
-      model.convert(data)
-      model
+      new(data)
     end
 
-    # @!visibility private
-    def initialize
+    # Create a new instance of a model.
+    # @param data [Hash{Symbol => Object}] Raw data to initialize the model with.
+    def initialize(data = {})
       @data = {}
-    end
-
-    # @!visibility private
-    def convert(data)
       # TODO: what if data isn't a hash?
       data.each do |field_name, value|
         next if value.nil?
@@ -144,19 +152,13 @@ module MeorphisTest40
         field = self.class.fields[field_name.to_sym]
         if field
           next if field[:mode] == :w
-
-          field_type = field[:type_fn].call
-          result = Converter.convert(field_type, value)
-          # TODO: error handling: if conversion throws, just put back whatever we got from the raw json?
-          @data[field_name.to_sym] = result
-        else
-          @data[field_name.to_sym] = value
         end
+        @data[field_name.to_sym] = value
       end
     end
 
     # Returns a Hash of the data underlying this object.
-    # Keys are Symbols and values are the parsed / typed domain objects.
+    # Keys are Symbols and values are the raw values from the response.
     # The return value indicates which values were ever set on the object -
     # i.e. there will be a key in this hash if they ever were, even if the
     # set value was nil.
@@ -170,21 +172,34 @@ module MeorphisTest40
 
     alias_method :to_hash, :to_h
 
-    # Lookup attribute value by key in the object.
-    # If this key was not provided when the object was formed (e.g. because the API response
-    # did not include that key), returns nil.
+    # Returns the raw value associated with the given key, if found. Otherwise, nil is returned.
     # It is valid to lookup keys that are not in the API spec, for example to access
     # undocumented features.
+    # This method does not parse response data into higher-level types.
     # Lookup by anything other than a Symbol is an ArgumentError.
     #
     # @param key [Symbol] Key to look up by.
     #
-    # @return [Object] Parsed / typed value at the given key, or nil if no data is available.
+    # @return [Object, nil] The raw value at the given key.
     def [](key)
       if !key.instance_of?(Symbol)
         raise ArgumentError, "Expected symbol key for lookup, got #{key.inspect}"
       end
       @data[key]
+    end
+
+    def deconstruct_keys(keys)
+      (keys || self.class.fields.keys).to_h do |k|
+        if !k.instance_of?(Symbol)
+          raise ArgumentError, "Expected symbol key for lookup, got #{k.inspect}"
+        end
+
+        if !self.class.fields.key?(k)
+          raise KeyError, "Expected one of #{self.class.fields.keys}, got #{k.inspect}"
+        end
+
+        [k, method(k).call]
+      end
     end
 
     # @return [String]
@@ -196,5 +211,8 @@ module MeorphisTest40
     def to_s
       @data.to_s
     end
+  end
+
+  class ConversionError < Error
   end
 end

@@ -2,7 +2,9 @@
 
 require_relative "test_helper"
 
-class MeorphisTest40::Test::BaseClientTest < Test::Unit::TestCase
+class MeorphisTest40::Test::BaseClientTest < Minitest::Test
+  parallelize_me!
+
   def test_from_uri_string
     assert_equal(
       {
